@@ -1,0 +1,38 @@
+CREATE TABLE IF NOT EXISTS user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    create_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO user (user_name, email) VALUES 
+('Алексей Смирнов', 'alexey.smirnov@example.com'),
+('Мария Иванова', 'maria.ivanova@example.com'),
+('Дмитрий Кузнецов', 'dmitry.kuznetsov@example.com'),
+('Екатерина Соколова', 'ekaterina.sokolova@example.com'),
+('Иван Попов', 'ivan.popov@example.com'),
+('Ольга Лебедева', 'olga.lebedeva@example.com'),
+('Сергей Козлов', 'sergey.kozlov@example.com'),
+('Анна Новикова', 'anna.novikova@example.com'),
+('Владимир Морозов', 'vladimir.morozov@example.com'),
+('Татьяна Васильева', 'tatiana.vasilyeva@example.com'),
+('Максим Павлов', 'maxim.pavlov@example.com'),
+('Наталья Федорова', 'natalia.fedorova@example.com'),
+('Павел Сидоров', 'pavel.sidorov@example.com'),
+('Елена Михайлова', 'elena.mikhaylova@example.com'),
+('Артём Орлов', 'artem.orlov@example.com'),
+('Юлия Макарова', 'yulia.makarova@example.com'),
+('Игорь Никитин', 'igor.nikitin@example.com'),
+('Светлана Захарова', 'svetlana.zaharova@example.com'),
+('Роман Волков', 'roman.volkov@example.com'),
+('Алина Беляева', 'alina.belyaeva@example.com'),
+('Константин Громов', 'konstantin.gromov@example.com'),
+('Ксения Егорова', 'kseniya.egorova@example.com'),
+('Василий Сафронов', 'vasiliy.safronov@example.com'),
+('Дарья Воронова', 'darya.voronova@example.com'),
+('Александр Фролов', 'alexandr.frolov@example.com'),
+('Ирина Климова', 'irina.klimova@example.com'),
+('Виктор Романов', 'viktor.romanov@example.com'),
+('Евгения Гончарова', 'evgenia.goncharova@example.com'),
+('Степан Тихонов', 'stepan.tikhonov@example.com'),
+('Полина Королёва', 'polina.koroleva@example.com');
