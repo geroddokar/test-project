@@ -17,7 +17,6 @@ export async function PUT(req: Request) {
   
         returnedStatus: 200,
       }
-  
       return NextResponse.json(response, { status: 200 })
     }
   }

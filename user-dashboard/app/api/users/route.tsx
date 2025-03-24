@@ -8,11 +8,8 @@ export async function GET(req: Request) {
 
     const query = searchParams.get('search') || '';
     const pageStr = searchParams.get('page') || "0";
-     // Извлечение параметров сортировки
-     const sort = searchParams.getAll('sort'); // Получает массив значений sort
-     const order = searchParams.getAll('order'); // Получает массив значений order
- 
-     // Преобразование сортировки в массив объектов
+     const sort = searchParams.getAll('sort'); 
+     const order = searchParams.getAll('order'); 
      const sorting = sort.map((field, index) => ({
        id: field,
        desc: order[index] === 'desc',

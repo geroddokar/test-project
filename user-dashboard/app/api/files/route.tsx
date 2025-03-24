@@ -11,11 +11,8 @@ export async function POST(req: NextRequest) {
         if (!file) {
             return NextResponse.json({ error: "Файл не найден" }, { status: 400 });
         }
-        // 2️⃣ Читаем содержимое файла как Buffer
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
-
-        // 3️⃣ Определяем формат файла
         const fileName = file.name.toLowerCase();
         let jsonData: any[];
         if (fileName.endsWith(".xlsx") || fileName.endsWith(".xls")) {
@@ -25,7 +22,6 @@ export async function POST(req: NextRequest) {
         } else {
         return NextResponse.json({ error: "Неподдерживаемый формат файла" }, { status: 400 });
         }
-        // 4️⃣ Проверяем структуру данных
         if (!Array.isArray(jsonData) || jsonData.length === 0) {
         return NextResponse.json({ error: "Файл не содержит данных" }, { status: 400 });
         }

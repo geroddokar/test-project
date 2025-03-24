@@ -1,7 +1,6 @@
 "use client"
 import * as React from "react"
 import {
-  ColumnDef,
   SortingState,
   flexRender,
   getCoreRowModel,
@@ -13,7 +12,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
@@ -25,15 +23,6 @@ import { getUsers, deleteAllUsers, deleteUser } from "@/services/users.service";
 import { Button } from "../ui/button";
 import { toast } from "sonner"
 import UploadFile from "../ui/uploadBtn";
-
-// interface DataTableProps<TData, TValue> {
-//   data: TData[]
-//   // pageSize: number
-//   // currentPage: number
-//   // totalRows: number
-//   // totalPages : number
-// }
-
 
 export function DataTable<TData, TValue>() {
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -112,10 +101,6 @@ export function DataTable<TData, TValue>() {
     manualSorting: true,
     rowCount: data?.total ? data.total : 0,
   })
-
-  // if (pageSize) {
-  //   table.setPageSize(pageSize)
-  // }
 
   const nextPage = () => {
     setPage(page + 1)
