@@ -4,10 +4,11 @@ import { User } from "@/types/user.type";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function PUT(req: Request) {
-    const { id, user_name, email } = await req.json()
+    const { id, user_name, email, create_at } = await req.json()
     try {
-      const update_user: User = { id, user_name, email, create_at: undefined };
-        return userUpdate(update_user.id, update_user)
+      const update_user: User = { id, user_name, email, create_at: create_at };
+      console.log(update_user)
+      return userUpdate(update_user.id, update_user)
     }
     catch (err ) {
       console.log('ERROR: API - ', (err as Error).message)

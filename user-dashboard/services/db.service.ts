@@ -2,6 +2,7 @@ import { GetDBSettings } from "@/lib/db";
 import { NextResponse } from 'next/server'
 import mysql from 'mysql2/promise'
 import { User } from "@/types/user.type";
+import { formatDate } from "@/lib/utils";
 let connectionParams = GetDBSettings()
 
 export const getAllUsers = async (page: number, search: string, sorting: { id: string; desc: boolean }[]) => {
@@ -61,8 +62,10 @@ export const getAllUsers = async (page: number, search: string, sorting: { id: s
 
 export const userCreate = async (user: User) => {
 	try {
+		console.log(user)
 		const connection = await mysql.createConnection(connectionParams)
-		const [results] = await connection.execute('INSERT INTO user_data.user (user_name, email) VALUES (?, ?)', [user.user_name, user.email])
+		const [results] = await connection.execute('INSERT INTO user_data.user (user_name, email, create_at) VALUES (?, ?, ?)', [user.user_name, user.email, formatDate(user.create_at)])
+		console.log(results)
 		connection.end()
 		return NextResponse.json(results)
 	}
@@ -104,7 +107,7 @@ export const userUpdate = async (id: number, user: User) => {
 	try {
 		console.log(user)
 		const connection = await mysql.createConnection(connectionParams)
-		const results = await connection.execute('UPDATE user_data.user SET user_name = ?, email = ? WHERE id = ?', [user.user_name, user.email, id])
+		const results = await connection.execute('UPDATE user_data.user SET user_name = ?, email = ?, create_at = ? WHERE id = ?', [user.user_name, user.email, formatDate(user.create_at), id])
 		connection.end()
 		return NextResponse.json(results);
 	}

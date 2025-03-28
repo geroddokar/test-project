@@ -4,3 +4,13 @@ import { twMerge } from "tailwind-merge"
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+export function formatDate(input: string | Date): string {
+  const date = input instanceof Date ? input : new Date(input);
+  console.log(date)
+  const day = date.getDate().toString().padStart(2, '0');  // Делаем день двухзначным
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');  // Месяцы в JS начинаются с 0
+  const year = date.getFullYear();
+
+  return `${year}-${month}-${day}`;
+}

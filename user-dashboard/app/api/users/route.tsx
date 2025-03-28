@@ -31,8 +31,8 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  const { id, user_name, email } = await req.json();
-  const update_user: User = { id, user_name, email, create_at: undefined};
+  const { id, user_name, email, create_at } = await req.json();
+  const update_user: User = { id, user_name, email, create_at: create_at};
   try {
     return userCreate(update_user)
   }
