@@ -23,15 +23,17 @@ import { getUsers, deleteAllUsers, deleteUser } from "@/services/users.service";
 import { Button } from "../ui/button";
 import { toast } from "sonner"
 import UploadFile from "../ui/uploadBtn";
+import WaitingDialog from "../WaitingDialog";
 
 export function DataTable<TData, TValue>() {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [page, setPage] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeletingAll, setIsDeletingAll] = useState(false);
+  const [isWaiting, setIsWaiting] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = React.useState<boolean>(false);
   const [selectedUser, setSelectedUser] = React.useState<User | null>(null);
 
-  
+
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery<UserTableData>({
@@ -45,12 +47,13 @@ export function DataTable<TData, TValue>() {
     console.log(`Користувач ${user.user_name} був видаленний`);
     queryClient.invalidateQueries({ queryKey: ["users", page, sorting] });
     onOpenChange(false);
-
+    setIsWaiting(false)
   };
   const onRequestError = () => {
     toast.error("Ой! Щось пішло не так", {
       description: 'Виникла проблема з вашим запитом.',
     });
+    setIsWaiting(false)
   };
 
   const delMut = useMutation({
@@ -60,6 +63,7 @@ export function DataTable<TData, TValue>() {
   });
 
   const onDelete = useCallback((user: User) => {
+    setIsWaiting(true)
     delMut.mutate(user.id)
   }, []);
 
@@ -74,8 +78,6 @@ export function DataTable<TData, TValue>() {
   }, []);
 
   const onOpenChange = useCallback((value: boolean) => {
-    console.log("onOpenChange")
-    console.log("value", value)
     setIsDialogOpen(value);
 
     if (!value) {
@@ -113,10 +115,12 @@ export function DataTable<TData, TValue>() {
   }
 
   const onDeleteAll = async (event: any) => {
-    setIsDeleting(true)
+    setIsDeletingAll(true)
+    setIsWaiting(true)
     await deleteAllUsers()
     queryClient.invalidateQueries({ queryKey: ["users", page, sorting] });
-    setIsDeleting(false)
+    setIsDeletingAll(false)
+    setIsWaiting(false)
     toast("Видалив усе!", {
       description: "Sunday, December 03, 2023 at 9:00 AM",
       action: {
@@ -129,11 +133,12 @@ export function DataTable<TData, TValue>() {
   return (
 
     <div className="conteiner">
+      <WaitingDialog isOpen={isWaiting}/>
       <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 py-5">
         <div className="flex items-center gap-4">
 
           <UserDialog isOpen={isDialogOpen} onOpenChange={onOpenChange} user={selectedUser} />
-          <Button className="px-4 py-2 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 transition" onClick={onDeleteAll}>{isDeleting ? "Видаляю...." : "Видалити усіх"}</Button>
+          <Button className="px-4 py-2 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 transition" onClick={onDeleteAll}>{isDeletingAll ? "Видаляю...." : "Видалити усіх"}</Button>
         </div>
         <UploadFile onUploadEnd={onUploadEnd} />
 
