@@ -37,10 +37,10 @@ export default function UploadFile({onUploadEnd}: UploadBtnProps) {
 
 
     return (
-        <div className="flexbasis-xs">
-            <Button onClick={()=> inputFile.current?.click()}>
-                {isUploading? "Завантажую...." : "Завантажити файл XLSX"}</Button>
-            <input ref={inputFile} type="file" id="xlsxFile" className="invisible" onChange={onChange}/>
+        <div className="ml-auto">
+            <Button onClick={()=> inputFile.current?.click()} className="ml-auto px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition">
+                {isUploading? "Завантажую...." : "Завантажити XLSX"}</Button>
+            <input ref={inputFile} type="file" id="xlsxFile" className="hidden" onChange={onChange}/>
         </div>
         
       )

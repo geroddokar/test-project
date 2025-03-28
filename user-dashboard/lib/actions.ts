@@ -19,13 +19,11 @@ const FormSchema = z.object({
   });
 
 export async function createUser(prevState: State, formData: FormData) {
-    // Validate form fields using Zod
     const validatedFields = FormSchema.safeParse({
       user_name: formData.get('user_name'),
       email: formData.get('email'),
     });
-  
-    // If form validation fails, return errors early. Otherwise, continue.
+
     if (!validatedFields.success) {
       return {
         errors: validatedFields.error.flatten().fieldErrors,

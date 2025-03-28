@@ -126,7 +126,7 @@ export default function UserDialog({ isOpen, onOpenChange, user }: UserDialogPro
 	return (
 		<Dialog open={isOpen} onOpenChange={onOpenChangeEv}>
 			<DialogTrigger asChild>
-				<Button size="sm">Add</Button>
+				<Button className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition">Add</Button>
 			</DialogTrigger>
 			<DialogContent className="sm:max-w-md">
 				<DialogHeader>
@@ -164,6 +164,7 @@ export default function UserDialog({ isOpen, onOpenChange, user }: UserDialogPro
 				</Form>
 				<DialogFooter>
 					<Button
+					className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition"
 						type="button"
 						disabled={!form.formState.isValid || createMutation.isPending}
 						onClick={form.handleSubmit(onSubmit)}
