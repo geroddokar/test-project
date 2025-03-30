@@ -25,12 +25,12 @@ export default function UploadFile({onUploadEnd}: UploadBtnProps) {
             onUploadEnd(true);
             setIsUploading(false);
             if (inputFile.current) {
-                inputFile.current.value = ""; // Очистка input
+                inputFile.current.value = "";
             }
             setIsWaiting(false)
         }catch(e) {
             if (inputFile.current) {
-                inputFile.current.value = ""; // Очистка input
+                inputFile.current.value = ""; 
             }
             console.log(e)
             setIsUploading(false);
