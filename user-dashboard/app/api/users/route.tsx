@@ -5,8 +5,6 @@ import { User } from '@/types/user.type';
 export async function GET(req: Request) {
   try {
     const { searchParams } = new URL(req.url)
-
-    const query = searchParams.get('search') || '';
     const pageStr = searchParams.get('page') || "0";
      const sort = searchParams.getAll('sort'); 
      const order = searchParams.getAll('order'); 
@@ -15,8 +13,7 @@ export async function GET(req: Request) {
        desc: order[index] === 'desc',
      }));
     const page = parseInt(pageStr, 10)
-    console.log(sorting)
-    return getAllUsers(page, query, sorting)
+    return getAllUsers(page, sorting)
   } catch (err) {
     console.log('ERROR: API - ', (err as Error).message)
 

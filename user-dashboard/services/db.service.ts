@@ -5,40 +5,32 @@ import { User } from "@/types/user.type";
 import { formatDate } from "@/lib/utils";
 let connectionParams = GetDBSettings()
 
-export const getAllUsers = async (page: number, search: string, sorting: { id: string; desc: boolean }[]) => {
+export const getAllUsers = async (page: number,  sorting: { id: string; desc: boolean }[]) => {
+	const connection = await mysql.createConnection(connectionParams);
 	try {
 
 		let getExpQuery = 'SELECT {S_S} FROM user_data.user'
-		const connection = await mysql.createConnection(connectionParams)
-		if (search) {
-			getExpQuery = getExpQuery + ` WHERE name LIKE '%${search}%' or email LIKE '%${search}%'`
-		}
+		let values: any[] = []
 		const count_sql = getExpQuery.replace("{S_S}", "COUNT(id) as count")
-		const [result, fields] = await connection.query(count_sql, [])
+		const [result, fields] = await connection.query(count_sql, values)
 		const rows = result as mysql.RowDataPacket[];
 		let totalCount = rows[0].count;
 
-		console.log(sorting);
-
 		if (sorting.length > 0) {
+			const allowedFields = ['name', 'email', 'create_at'];
 			const orderBy = sorting
-				.map(({ id, desc }) => `${id} ${desc ? 'DESC' : 'ASC'}`)
-				.join(', ');
+			  .filter(({ id }) => allowedFields.includes(id))
+			  .map(({ id, desc }) => `${id} ${desc ? 'DESC' : 'ASC'}`)
+			  .join(', ');
 			getExpQuery += ` ORDER BY ${orderBy}`;
 		}
 
-		if (page) {
-			const offset = page * 10
-			getExpQuery = `${getExpQuery} LIMIT 10 OFFSET ${offset}`
-		} else {
-			getExpQuery = `${getExpQuery} LIMIT 10 OFFSET 0`
-		}
+		const offset = isNaN(page) ? 0 : page * 10;
+		getExpQuery = `${getExpQuery} LIMIT 10 OFFSET ${offset}`;
 
-		let values: any[] = []
-		console.log("API SQL " + getExpQuery)
+		values = []
 		getExpQuery = getExpQuery.replace("{S_S}", "*")
 		const [results] = await connection.execute(getExpQuery, values)
-		connection.end()
 		const data = {
 			users: results,
 			total: totalCount
@@ -46,88 +38,88 @@ export const getAllUsers = async (page: number, search: string, sorting: { id: s
 		return NextResponse.json(data)
 	}
 	catch (err) {
-		console.log('ERROR: API - ', (err as Error).message)
-		console.log(err)
 		const response = {
 			error: (err as Error).message,
 			users: [],
 			total: 0,
-			returnedStatus: 200,
+			returnedStatus: 500,
 		}
 
-		return NextResponse.json(response, { status: 200 })
+		return NextResponse.json(response, { status: 500 });
+	} finally {
+		connection.end(); // Гарантированное закрытие соединения
 	}
 }
 
 
 export const userCreate = async (user: User) => {
+	const connection = await mysql.createConnection(connectionParams);
 	try {
-		console.log(user)
-		const connection = await mysql.createConnection(connectionParams)
 		const [results] = await connection.execute('INSERT INTO user_data.user (user_name, email, create_at) VALUES (?, ?, ?)', [user.user_name, user.email, formatDate(user.create_at)])
-		console.log(results)
-		connection.end()
 		return NextResponse.json(results)
 	}
 	catch (err) {
-		console.log('ERROR: API - ', (err as Error).message)
-		console.log(err)
 		const response = {
 			error: (err as Error).message,
-
-			returnedStatus: 200,
+			users: [],
+			total: 0,
+			returnedStatus: 500,
 		}
 
-		return NextResponse.json(response, { status: 200 })
+		return NextResponse.json(response, { status: 500 });
+	} finally {
+		connection.end(); // Гарантированное закрытие соединения
 	}
 }
 
 export const userDelete = async (id: number) => {
+	const connection = await mysql.createConnection(connectionParams);
 	try {
-		const connection = await mysql.createConnection(connectionParams)
 		const [results] = await connection.execute('DELETE FROM user_data.user WHERE id = ?', [id])
-		connection.end()
 		return NextResponse.json(results)
 	}
 	catch (err) {
-		console.log('ERROR: API - ', (err as Error).message)
-
 		const response = {
 			error: (err as Error).message,
-
-			returnedStatus: 200,
+			users: [],
+			total: 0,
+			returnedStatus: 500,
 		}
 
-		return NextResponse.json(response, { status: 200 })
+		return NextResponse.json(response, { status: 500 });
+	} finally {
+		connection.end(); // Гарантированное закрытие соединения
 	}
 }
 
 
 export const userUpdate = async (id: number, user: User) => {
+	const connection = await mysql.createConnection(connectionParams);
 	try {
-		console.log(user)
-		const connection = await mysql.createConnection(connectionParams)
 		const results = await connection.execute('UPDATE user_data.user SET user_name = ?, email = ?, create_at = ? WHERE id = ?', [user.user_name, user.email, formatDate(user.create_at), id])
-		connection.end()
 		return NextResponse.json(results);
 	}
 	catch (err) {
-		console.log('ERROR: API - ', (err as Error).message)
-		console.log(err)
 		const response = {
 			error: (err as Error).message,
-
-			returnedStatus: 200,
+			users: [],
+			total: 0,
+			returnedStatus: 500,
 		}
 
-		return NextResponse.json(response, { status: 200 })
+		return NextResponse.json(response, { status: 500 });
+	} finally {
+		connection.end(); // Гарантированное закрытие соединения
 	}
 }
 
 export const createAllItems = async (users: User[]) => {
-
+	const connection = await mysql.createConnection(connectionParams);
 	try {
-		const connection = await mysql.createConnection(connectionParams)
+		if (users.length === 0) {
+			return NextResponse.json({ status: "Користувачів не знайдено" }, { status: 400 });
+		}
+
 		const values = users.map(user => [user.user_name, user.email, user.create_at]);
 
 		const query = `
@@ -144,35 +136,35 @@ export const createAllItems = async (users: User[]) => {
 		}, { status: 200 })
 
 	} catch (err) {
-		console.log('ERROR: API - ', (err as Error).message)
 		const response = {
 			error: (err as Error).message,
-
-			returnedStatus: 200,
+			users: [],
+			total: 0,
+			returnedStatus: 500,
 		}
 
-		return NextResponse.json(response, { status: 200 })
+		return NextResponse.json(response, { status: 500 });
+	} finally {
+		connection.end(); // Гарантированное закрытие соединения
 	}
-
-
 }
 
 export const deleteAllUser = async () => {
+	const connection = await mysql.createConnection(connectionParams);
 	try {
-		const connection = await mysql.createConnection(connectionParams)
 		const [results] = await connection.execute('DELETE FROM user_data.user where id > 0;')
-		connection.end()
 		return NextResponse.json(results)
 	}
 	catch (err) {
-		console.log('ERROR: API - ', (err as Error).message)
-		console.log(err)
 		const response = {
 			error: (err as Error).message,
-
-			returnedStatus: 200,
+			users: [],
+			total: 0,
+			returnedStatus: 500,
 		}
 
-		return NextResponse.json(response, { status: 200 })
+		return NextResponse.json(response, { status: 500 });
+	} finally {
+		connection.end(); // Гарантированное закрытие соединения
 	}
 }

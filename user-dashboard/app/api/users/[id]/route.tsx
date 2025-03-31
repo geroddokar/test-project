@@ -7,7 +7,6 @@ export async function PUT(req: Request) {
     const { id, user_name, email, create_at } = await req.json()
     try {
       const update_user: User = { id, user_name, email, create_at: create_at };
-      console.log(update_user)
       return userUpdate(update_user.id, update_user)
     }
     catch (err ) {
@@ -25,9 +24,7 @@ export async function PUT(req: Request) {
 
   
 export async function DELETE(req: NextRequest, {params}:{params: Promise<{id: number}>}) {
-    console.log(req.url)
     const id = (await params).id
-    console.log("API ID="+id)
     try {
      return userDelete(id)
     }

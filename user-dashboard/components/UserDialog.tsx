@@ -116,7 +116,7 @@ export default function UserDialog({ isOpen, onOpenChange, user }: UserDialogPro
 			id: 0,
 			user_name: values.user_name,
 			email: values.email,
-			create_at: values.create_at,
+			create_at: values.create_at || new Date(),
 		};
 		if (!user) {
 			createMutation.mutate(newUser);

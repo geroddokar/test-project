@@ -6,10 +6,8 @@ import { SortingState } from "@tanstack/react-table";
 const BASE_URL = '/users';
 
 export const getUsers = async (page: number, sorting: SortingState): Promise<UserTableData> => {
-	console.log(sorting)
 	let URL = BASE_URL;
 	URL = `${BASE_URL}?page=${page}`
-	console.log("SORT SORT: ", sorting)
 	if (sorting && sorting.length > 0) {
 		const sortingParams = sorting
 			.map(({ id, desc }) => `sort=${id}&order=${desc ? 'desc' : 'asc'}`)
