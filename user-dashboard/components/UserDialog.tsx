@@ -102,9 +102,9 @@ export default function UserDialog({ isOpen, onOpenChange, user }: UserDialogPro
 	useEffect(() => {
 		if (user) {
 			form.reset({
-				user_name: user.user_name,
-				email: user.email,
-				create_at: user.create_at
+				user_name: user?.user_name || "",
+				email: user?.email || "",
+				create_at: user?.create_at ? new Date(user.create_at) : undefined,
 			});
 		} else {
 			form.reset({ user_name: "", email: "", create_at: undefined })
@@ -149,7 +149,7 @@ export default function UserDialog({ isOpen, onOpenChange, user }: UserDialogPro
 							control={form.control}
 							render={({ field }) => (
 								<FormItem>
-									<FormLabel>Ім'я користувача</FormLabel>
+									<FormLabel>Імя користувача</FormLabel>
 									<FormControl>
 										<Input {...field} />
 									</FormControl>

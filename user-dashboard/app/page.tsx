@@ -31,7 +31,7 @@ export default function Home() {
                 <h3 className="text-lg font-semibold">Створення проекту</h3>
                 <ul className="list-disc pl-6 space-y-1">
                     <li>Ініціалізувати новий <strong>Next.js</strong> проект.</li>
-                    <li>Створити базу даних <strong>MySQL</strong> з таблицею користувачів (<em>ID, ім'я, email, дата створення</em>).</li>
+                    <li>Створити базу даних <strong>MySQL</strong> з таблицею користувачів (<em>ID, ім&apos;я, email, дата створення</em>).</li>
                 </ul>
             </div>
         </section>

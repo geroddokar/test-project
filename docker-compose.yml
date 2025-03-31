@@ -22,7 +22,7 @@ services:
         max-file: "3"
   user-dashboard:
     build:
-      context: .
+      context: ./user-dashboard
       dockerfile: Dockerfile
     container_name: user_dashboard_container
     restart: always
